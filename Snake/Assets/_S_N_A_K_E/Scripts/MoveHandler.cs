@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
+using NaughtyAttributes;
 
 namespace Gustorvo.Snake
 {
@@ -16,22 +18,51 @@ namespace Gustorvo.Snake
 
         public ISnake Snake { get; private set; }
 
+        private void Awake()
+        {
+            Init();
+        }
+
 
         private void Start()
         {
             Assert.IsNotNull(snakeBehaviourBehaviour, "SnakeMoverBehaviour is not set");
-
-            Snake = snakeBehaviourBehaviour;
-            Snake.Target = snakeTargetBehaviour;
-
             snakeMoveCoroutine = StartCoroutine(MoveSnake());
+        }
+
+        void Init()
+        {
+            Snake = snakeBehaviourBehaviour;
+            Snake.Food = snakeTargetBehaviour;
+        }
+
+        void InitAllEditor()
+        {
+            Init();
+            Snake.Init();
+        }
+
+        [Button]
+        public void Move()
+        {
+           // InitAllEditor();
+            if (Snake.HasReachedFood)
+                Snake.EatFood();
+            Snake.Move();
+        }
+
+        [Button]
+        public void MoveOpposite()
+        {
+            InitAllEditor();
+            Snake.MoveInOppositeDirection();
         }
 
         IEnumerator MoveSnake()
         {
-            while (isActiveAndEnabled && !Snake.HasReachedTarget)
+            while (isActiveAndEnabled)
             {
-                Snake.Move();
+                Move();
                 yield return new WaitForSeconds(1f / movesPerSecond);
             }
         }

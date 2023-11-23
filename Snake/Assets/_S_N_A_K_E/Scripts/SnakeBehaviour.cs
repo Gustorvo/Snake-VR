@@ -1,72 +1,130 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gustorvo.Snake.Input;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gustorvo.Snake
 {
     public interface ISnake
     {
-        public Transform TailTransform { get; }
+        public SnakeBody Tail { get; }
 
-        public Transform HeadTransform { get; }
+        public SnakeBody Head { get; }
 
         IMover Mover { get; }
-        bool HasReachedTarget { get; }
-        ITarget Target { get; set; }
+        bool HasReachedFood { get; }
+        ITarget Food { get; set; }
         void Move();
+        void MoveInOppositeDirection();
+        void EatFood();
+        void Init();
     }
 
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
-        public List<Transform> snakeParts = new List<Transform>();
+        [SerializeField] private SnakeBody snakeBodyPrefab;
+        [SerializeField] SnakeBody headPointer;
+        [SerializeField] SnakeBody tailPointer;
+        public List<SnakeBody> snakeParts = new();
         public IMover Mover { get; private set; } = new Mover();
 
-        public ITarget Target
-        {
-            get => target;
-            set => target = value;
-        }
+        public ITarget Food { get; set; }
 
-        private ITarget target;
 
         readonly INavigator navigator = new Navigator();
         private Vector3 currentPosition;
 
-        public bool HasReachedTarget =>
-            Vector3.Distance(TailTransform.position, Target.Position) < Mover.MoveStep;
+        public bool HasReachedFood => Food != null && Food.Transform != null &&
+                                      Vector3.Distance(Head.Position, Food.Position) < Mover.MoveStep;
 
 
         private void Awake()
         {
-            snakeParts = GetComponentsInChildren<Transform>().ToList();
-            HeadTransform = snakeParts.First();
-            TailTransform = snakeParts.Last();
+            Init();
+        }
+
+        public void Init()
+        {
+            // if (snakeParts.Count > 0) return;
+            snakeParts.Clear();
+            foreach (Transform child in transform)
+            {
+                if (!child.TryGetComponent(out SnakeBody body))
+                {
+                    body = child.gameObject.AddComponent<SnakeBody>();
+                }
+
+                snakeParts.Add(body);
+            }
+
+            Head = headPointer;
+            Tail = tailPointer;
+        }
+
+        public void EatFood()
+        {
+            SnakeBody newHead = Instantiate(snakeBodyPrefab, parent: transform, position: Food.Position,
+                rotation: Quaternion.identity);
+            snakeParts.Insert(tailIndex, newHead);
+            Head = newHead;
+            Food.Reposition();
         }
 
         public void Move()
         {
-            if (navigator.Navigate(in currentPosition, in target, out var navData))
-                Mover.Move(GetNextPartToMove(), navData.Direction);
+            Vector3 Direction = SnakeMoveDirection.Direction;
+            SnakeBody tail = GetTailPart(out int tailIndex);
+            Mover.Move(tail, Direction, Head.Position);
+            Head = tail;
+            Tail = snakeParts[GetPreviousIndex(tailIndex)];
         }
 
-
-        private int tailIndex = 0;
-
-        public Transform GetNextPartToMove()
+        public void MoveInOppositeDirection()
         {
-            tailIndex = (tailIndex + 1) % snakeParts.Count;
-            TailTransform = snakeParts[tailIndex];
-            return TailTransform;
+            Vector3 Direction = -SnakeMoveDirection.Direction;
+            SnakeBody head = snakeParts[headIndex];
+            Mover.Move(head, Direction, Tail.Position);
+            var temp = head;
+            Tail = head;
+            Head = snakeParts[GetNextIndex(tailIndex)];
         }
 
-        private Transform tail;
+        public int GetPreviousIndex(int index)
+        {
+            return (index - 1 + snakeParts.Count) % snakeParts.Count;
+        }
 
-        public Transform TailTransform
+        public int GetNextIndex(int index)
+        {
+            return (index + 1 + snakeParts.Count) % snakeParts.Count;
+        }
+
+
+        private int tailIndex => snakeParts.IndexOf(Tail);
+        private int headIndex => snakeParts.IndexOf(Head);
+
+        public SnakeBody GetTailPart(out int tailIndex)
+        {
+            tailIndex = snakeParts.IndexOf(Tail);
+            return Tail;
+        }
+
+        public SnakeBody tail;
+
+        public SnakeBody Tail
         {
             get => tail;
             set { tail = value; }
         }
 
-        public Transform HeadTransform { get; private set; }
+        public SnakeBody Head
+        {
+            get => head;
+            set => head = value;
+        }
+
+        public SnakeBody head;
     }
 }
