@@ -165,7 +165,7 @@ PlayerSettings:
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 29
   AndroidTargetSdkVersion: 0
-  AndroidPreferredInstallLocation: 1
+  AndroidPreferredInstallLocation: 0
   aotOptions: 
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
@@ -723,7 +723,7 @@ PlayerSettings:
     PS5: URP_OUTLINE
     QNX: URP_OUTLINE
     Stadia: URP_OUTLINE
-    Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;URP_OUTLINE
+    Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;URP_OUTLINE;UNITY_CCU;CURVEDUI_TMP;CURVEDUI_UNITY_XR
     VisionOS: URP_OUTLINE
     WebGL: URP_OUTLINE
     Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;URP_OUTLINE
