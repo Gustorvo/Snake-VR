@@ -9,8 +9,8 @@ namespace Gustorvo.Snake
 {
     public interface ISnake
     {
+        public Vector3[] Positions { get; } 
         public SnakeBody Tail { get; }
-
         public SnakeBody Head { get; }
 
         IMover Mover { get; }
@@ -113,6 +113,7 @@ namespace Gustorvo.Snake
 
         public SnakeBody tail;
 
+        public Vector3[] Positions => snakeParts.Select(x => x.Position).ToArray();
         public SnakeBody Tail
         {
             get => tail;

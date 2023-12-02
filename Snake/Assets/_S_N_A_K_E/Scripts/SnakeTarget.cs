@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Gustorvo.Snake
@@ -14,6 +15,15 @@ namespace Gustorvo.Snake
     {
         public Vector3 Position => transform.position;
         public Transform Transform => transform;
-        public void Reposition() => transform.position = Core.PlayBoundary.GetRandomPosition();
+
+        [Button]
+        public void Reposition()
+        {
+            var snakePositions = Core.Snake.Positions;
+            if (Core.PlayBoundary.TryGetRandomPositionExcluding(snakePositions, out var randomPosition))
+            {
+                transform.position = randomPosition;
+            }
+        }
     }
 }
