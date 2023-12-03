@@ -9,11 +9,11 @@ namespace Gustorvo.Snake
 {
     public interface ISnake
     {
-        public Vector3[] Positions { get; } 
+        public Vector3[] Positions { get; }
         public SnakeBody Tail { get; }
-        public SnakeBody Head { get; }
+        public static SnakeBody Head { get; }
 
-        IMover Mover { get; }
+        IPositioner Positioner { get; }
         bool HasReachedFood { get; }
         ITarget Food { get; set; }
         void Move();
@@ -28,7 +28,7 @@ namespace Gustorvo.Snake
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
         public List<SnakeBody> snakeParts = new();
-        public IMover Mover { get; private set; } = new Mover();
+        public IPositioner Positioner { get; private set; } = new AIPositioner();
 
         public ITarget Food { get; set; }
 
@@ -37,7 +37,7 @@ namespace Gustorvo.Snake
         private Vector3 currentPosition;
 
         public bool HasReachedFood => Food != null && Food.Transform != null &&
-                                      Vector3.Distance(Head.Position, Food.Position) < Mover.MoveStep;
+                                      Vector3.Distance(Head.Position, Food.Position) < Positioner.MoveStep;
 
 
         private void Awake()
@@ -47,7 +47,8 @@ namespace Gustorvo.Snake
 
         public void Init()
         {
-            // if (snakeParts.Count > 0) return;
+            instance = this;
+
             snakeParts.Clear();
             foreach (Transform child in transform)
             {
@@ -74,19 +75,16 @@ namespace Gustorvo.Snake
 
         public void Move()
         {
-            Vector3 Direction = SnakeMoveDirection.Direction;
-            SnakeBody tail = GetTailPart(out int tailIndex);
-            Mover.Move(tail, Direction, Head.Position);
-            Head = tail;
+            var nextPosition = Positioner.GetNextPosition();
+            Tail.MoveTo(nextPosition);
+            Head = Tail;
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
         }
 
         public void MoveInOppositeDirection()
         {
-            Vector3 Direction = -SnakeMoveDirection.Direction;
-            SnakeBody head = snakeParts[headIndex];
-            Mover.Move(head, Direction, Tail.Position);
-            var temp = head;
+            var nextPosition = Positioner.GetNextPosition();
+            Head.MoveTo(nextPosition);
             Tail = head;
             Head = snakeParts[GetNextIndex(tailIndex)];
         }
@@ -114,17 +112,20 @@ namespace Gustorvo.Snake
         public SnakeBody tail;
 
         public Vector3[] Positions => snakeParts.Select(x => x.Position).ToArray();
+
         public SnakeBody Tail
         {
             get => tail;
             set { tail = value; }
         }
 
-        public SnakeBody Head
+        public static SnakeBody Head
         {
-            get => head;
-            set => head = value;
+            get => instance.head;
+            set => instance.head = value;
         }
+
+        private static SnakeBehaviour instance { get; set; }
 
         public SnakeBody head;
     }

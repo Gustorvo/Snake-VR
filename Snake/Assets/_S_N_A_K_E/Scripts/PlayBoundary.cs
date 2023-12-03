@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Gustorvo.Snake
@@ -13,45 +15,47 @@ namespace Gustorvo.Snake
         [SerializeField] private Transform debugCube;
         [SerializeField] bool debug;
         [SerializeField] Transform debugCubeParent;
-        [SerializeField] private float snakeBodySize = 0.1f;
+        [SerializeField] private float unitSize = 0.1f; // size of 1 body unit (of snake)
         [SerializeField] int gridSize = 1;
         [SerializeField] private BoxCollider collider;
         private Bounds gameBounds => collider.bounds;
-        private int unitLength;
-
-
-        private Vector3[][][] gameBoundsPositions;
+        private int itemsInRow;
+        private Vector3[] positionsInCube;
 
         private void Awake()
         {
-          
-            unitLength = (int)(gridSize / snakeBodySize);
+            FormACube();
+        }
 
-            int numOfPositions = unitLength * 3;
-            gameBoundsPositions = new Vector3[numOfPositions][][];
+        private void FormACube()
+        {
+            itemsInRow = (int)(gridSize / unitSize);
 
-            for (int i = 0; i < numOfPositions; i++)
+            int itemsInCube = itemsInRow * itemsInRow * itemsInRow;
+            positionsInCube = new Vector3[itemsInCube];
+
+            for (int i = 0; i < itemsInCube; i++)
             {
-                gameBoundsPositions[i] = new Vector3[unitLength][];
-                for (int j = 0; j < unitLength; j++)
-                {
-                    gameBoundsPositions[i][j] = new Vector3[unitLength];
-                    for (int k = 0; k < unitLength; k++)
-                    {
-                        Vector3 pos = new Vector3(
-                            gameBounds.min.x + snakeBodySize * j,
-                            gameBounds.min.y + snakeBodySize * k,
-                            gameBounds.min.z + snakeBodySize * i
-                        );
-                        gameBoundsPositions[i][j][k] = pos;
-                        if (debug)
-                        {
-                            var cube = Instantiate(debugCube, position: pos, rotation: Quaternion.identity,
-                                parent: debugCubeParent);
-                            cube.localScale = Vector3.one * snakeBodySize;
-                        }
-                    }
-                }
+                int j = i % itemsInRow;
+                int k = (i / itemsInRow) % itemsInRow;
+                int l = i / (itemsInRow * itemsInRow);
+                Vector3 pos = new Vector3(
+                    gameBounds.min.x + unitSize * j,
+                    gameBounds.min.y + unitSize * k,
+                    gameBounds.min.z + unitSize * l
+                );
+
+                positionsInCube[i] = pos;
+            }
+        }
+
+        [Button]
+        void InstantiateCubes()
+        {
+            for (int i = 0; i < positionsInCube.Length; i++)
+            {
+                Instantiate(debugCube, position: positionsInCube[i], rotation: Quaternion.identity,
+                    parent: debugCubeParent).localScale = Vector3.one * unitSize;
             }
         }
 
@@ -70,8 +74,10 @@ namespace Gustorvo.Snake
         public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
         {
             randomPosition = Vector3.zero;
-            if (excludePositions.Length >= unitLength * unitLength * unitLength)
+
+            if (excludePositions.Length >= positionsInCube.Length)
             {
+                Debug.LogError("Too many positions to exclude");
                 return false;
             }
 
@@ -79,18 +85,22 @@ namespace Gustorvo.Snake
             do
             {
                 i++;
-                int indexX = Random.Range(0, unitLength);
-                int indexY = Random.Range(0, unitLength);
-                int indexZ = Random.Range(0, unitLength);
-                randomPosition = gameBoundsPositions[indexX][indexY][indexZ];
+                int randomIndex = Random.Range(0, positionsInCube.Length);
+                randomPosition = positionsInCube[randomIndex];
             } while (excludePositions.Contains(randomPosition) && i < 100);
 
             if (i >= 100)
             {
+                Debug.LogError("Failed to get random position");
                 return false;
             }
 
             return true;
+        }
+
+        public bool IsPositionInBounds(Vector3 postion)
+        {
+            return gameBounds.Contains(postion);
         }
     }
 }

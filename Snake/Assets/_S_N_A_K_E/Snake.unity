@@ -155,12 +155,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba47f4ea524853e418a3e36363adff40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugCube: {fileID: 5484564749993807018, guid: 66662650c30aa0741babb143a20f4a3c, type: 3}
-  debug: 1
+  debugCube: {fileID: 5994020974794546590, guid: a9965f19b4b4dea4d88ce3fce2fd6049, type: 3}
+  debug: 0
   debugCubeParent: {fileID: 1254170767}
   snakeBodySize: 0.1
   gridSize: 1
   collider: {fileID: 2783380}
+  gameBoundsPositions: []
 --- !u!65 &2783380
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -212,7 +213,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2783378}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -720,7 +721,6 @@ GameObject:
   - component: {fileID: 2080107177}
   - component: {fileID: 2080107176}
   - component: {fileID: 2080107179}
-  - component: {fileID: 2080107180}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -846,18 +846,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &2080107180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080107175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bb42831ee5422f409e7f24f9e7488ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2566678049913415365
 PrefabInstance:
   m_ObjectHideFlags: 0
