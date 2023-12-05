@@ -27,5 +27,7 @@ namespace Gustorvo.Snake
         {
             transform.position = moveTo;
         }
+
+       
     }
 }

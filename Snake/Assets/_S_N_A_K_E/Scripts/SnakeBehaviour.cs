@@ -43,6 +43,14 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
+            
+            SnakeBodyComponent.OnSnakeCollidedWithItself -= SnakeDead;
+            SnakeBodyComponent.OnSnakeCollidedWithItself += SnakeDead;
+        }
+
+        private void SnakeDead()
+        {
+            Debug.Log("Snake collided with itself. Dead!");
         }
 
         public void Init()

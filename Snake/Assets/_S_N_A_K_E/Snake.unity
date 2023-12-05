@@ -158,10 +158,9 @@ MonoBehaviour:
   debugCube: {fileID: 5994020974794546590, guid: a9965f19b4b4dea4d88ce3fce2fd6049, type: 3}
   debug: 0
   debugCubeParent: {fileID: 1254170767}
-  snakeBodySize: 0.1
+  unitSize: 0.1
   gridSize: 1
   collider: {fileID: 2783380}
-  gameBoundsPositions: []
 --- !u!65 &2783380
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -856,7 +855,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.604
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.y
@@ -864,7 +863,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.008
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalRotation.w
@@ -966,8 +965,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 2080107178}
   - {fileID: 85171374}
-  - {fileID: 2566678049913415365}
   - {fileID: 1227868755}
   - {fileID: 614664004}
   - {fileID: 2783381}
   - {fileID: 1254170767}
+  - {fileID: 2566678049913415365}
