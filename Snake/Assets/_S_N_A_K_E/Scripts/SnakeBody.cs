@@ -7,22 +7,24 @@ namespace Gustorvo.Snake
     [Serializable]
     public class SnakeBody : SnakeBodyComponent
     {
-        //public SnakeBodyComponent c;
+        [SerializeField] Material headMaterial;
+        [SerializeField] Material bodyMaterial;
+        [SerializeField] Material tailMaterial;
         public Vector3 Position => transform.position;
         public Transform Transform => transform;
-        public Material Material { get; set; }
-        //private Transform transform;
-
-        // public SnakeBody(Transform transform)
-        // {
-        //     this.transform = transform;
-        // }
+        private Renderer renderer;
 
         private void Init()
         {
-            Material = transform.GetComponent<Renderer>().material;
+            renderer = transform.GetComponentInChildren<Renderer>();
         }
 
+        private void Awake()
+        {
+            Init();
+        }
+
+       
         public void MoveTo(Vector3 moveTo)
         {
             transform.position = moveTo;
@@ -32,6 +34,16 @@ namespace Gustorvo.Snake
         {
             bodyCollidesWithItself = Core.Snake.Positions.Contains(moveToPosition);
             MoveTo(moveToPosition);
+            ApplyHeadMaterial();
         }
+
+        public void ApplyHeadMaterial()
+        {
+            renderer.material = headMaterial;
+        }
+        
+        public void ApplyBodyMaterial() => renderer.material = bodyMaterial;
+        
+        public void ApplyTailMaterial() => renderer.material = tailMaterial;
     }
 }

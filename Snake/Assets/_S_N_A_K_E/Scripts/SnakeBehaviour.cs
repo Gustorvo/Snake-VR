@@ -15,7 +15,7 @@ namespace Gustorvo.Snake
 
         IPositioner Positioner { get; }
         bool HasReachedFood { get; }
-        bool HasCollidedWithItself { get; }
+        bool CanMove { get; }
         ITarget Food { get; set; }
         void Move();
         void MoveInOppositeDirection();
@@ -25,13 +25,14 @@ namespace Gustorvo.Snake
 
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
+        [SerializeField] private Color headColor;
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
         public List<SnakeBody> snakeParts = new();
         public IPositioner Positioner { get; private set; } = new AIPositioner();
 
-        public bool HasCollidedWithItself { get; private set; } 
+        public bool CanMove { get; private set; } = true;
         public ITarget Food { get; set; }
 
 
@@ -45,15 +46,8 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
-
-            SnakeBodyComponent.OnSnakeCollidedWithItself -= SnakeDead;
-            SnakeBodyComponent.OnSnakeCollidedWithItself += SnakeDead;
         }
 
-        private void SnakeDead()
-        {
-            Debug.Log("Snake collided with itself. Dead!");
-        }
 
         public void Init()
         {
@@ -78,19 +72,26 @@ namespace Gustorvo.Snake
         {
             SnakeBody newHead = Instantiate(snakeBodyPrefab, parent: transform, position: Food.Position,
                 rotation: Quaternion.identity);
-            snakeParts.Insert(tailIndex, newHead);
+            snakeParts.Insert(headIndex, newHead);
+            Head.ApplyBodyMaterial();
             Head = newHead;
+            Head.ApplyHeadMaterial();
             Food.Reposition();
         }
 
         public void Move()
         {
-            bool canMove = true;
             var nextPosition = Positioner.GetNextPosition();
-            Tail.TryMoveTo(nextPosition, out canMove);
-            HasCollidedWithItself = !canMove;
+            Tail.TryMoveTo(nextPosition, out bool hasCollided);
+            CanMove = !hasCollided;
+            if (CanMove)
+            {
+                Head.ApplyBodyMaterial();
+            }
+
             Head = Tail;
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
+            Tail.ApplyTailMaterial();
         }
 
         public void MoveInOppositeDirection()
