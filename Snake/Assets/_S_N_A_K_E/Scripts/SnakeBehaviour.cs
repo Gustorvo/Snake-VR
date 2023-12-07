@@ -15,6 +15,7 @@ namespace Gustorvo.Snake
 
         IPositioner Positioner { get; }
         bool HasReachedFood { get; }
+        bool HasCollidedWithItself { get; }
         ITarget Food { get; set; }
         void Move();
         void MoveInOppositeDirection();
@@ -30,6 +31,7 @@ namespace Gustorvo.Snake
         public List<SnakeBody> snakeParts = new();
         public IPositioner Positioner { get; private set; } = new AIPositioner();
 
+        public bool HasCollidedWithItself { get; private set; } 
         public ITarget Food { get; set; }
 
 
@@ -43,7 +45,7 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
-            
+
             SnakeBodyComponent.OnSnakeCollidedWithItself -= SnakeDead;
             SnakeBodyComponent.OnSnakeCollidedWithItself += SnakeDead;
         }
@@ -83,8 +85,10 @@ namespace Gustorvo.Snake
 
         public void Move()
         {
+            bool canMove = true;
             var nextPosition = Positioner.GetNextPosition();
-            Tail.MoveTo(nextPosition);
+            Tail.TryMoveTo(nextPosition, out canMove);
+            HasCollidedWithItself = !canMove;
             Head = Tail;
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
         }

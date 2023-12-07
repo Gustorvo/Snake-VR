@@ -43,12 +43,14 @@ namespace Gustorvo.Snake
         }
 
         [Button]
-        public void Move()
+        public bool TryMove()
         {
-           // InitAllEditor();
+            // InitAllEditor();
+
             if (Snake.HasReachedFood)
                 Snake.EatFood();
             Snake.Move();
+            return Snake.HasCollidedWithItself;
         }
 
         [Button]
@@ -60,11 +62,13 @@ namespace Gustorvo.Snake
 
         IEnumerator MoveSnake()
         {
-            while (isActiveAndEnabled)
+            bool canMove = true;
+            while (canMove)
             {
-                Move();
+                canMove = TryMove();
                 yield return new WaitForSeconds(1f / movesPerSecond);
             }
+            Debug.Log("Snake died");
         }
     }
 }
