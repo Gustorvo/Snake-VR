@@ -1,22 +1,32 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gustorvo.Snake
 {
     public class Core : MonoBehaviour
     {
+        [SerializeField, Range(0.05f, 0.2f)] private float cellSize = 0.1f;
         [field: SerializeField] public PlayBoundary playBoundary { get; private set; }
         [field: SerializeField] public SnakeBehaviour snake { get; private set; }
         private static Core instance { get; set; }
 
-        public static PlayBoundary PlayBoundary => instance.playBoundary;
-        public static SnakeBehaviour Snake => instance.snake;
+        public static Core Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = FindObjectOfType<Core>();
+                return instance;
+            }
+            set => instance = value;
+        }
+
+        public static PlayBoundary PlayBoundary => Instance.playBoundary;
+        public static SnakeBehaviour Snake => Instance.snake;
+        public static float CellSize => Instance.cellSize;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
     }
 }

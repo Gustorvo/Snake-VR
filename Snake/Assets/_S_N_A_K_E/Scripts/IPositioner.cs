@@ -10,7 +10,7 @@ namespace Gustorvo.Snake
     {
         public Vector3 GetNextPosition();
         public Vector3 GetNextPositionInDirection(Vector3 direction);
-        public float MoveStep { get; set; }
+        public float MoveStep { get;}
     }
 
     public class Positioner : IPositioner
@@ -27,7 +27,7 @@ namespace Gustorvo.Snake
             return direction * MoveStep + headPosition;
         }
 
-        public float MoveStep { get; set; } = 0.1f;
+        public float MoveStep => Core.CellSize;
     }
 
     public class AIPositioner : IPositioner
@@ -45,9 +45,9 @@ namespace Gustorvo.Snake
         {
             // Vector3 direction = SnakeMoveDirection.Direction;
             Vector3 direction = GetStraightDirectionToTarget(snake.Food.Position);
-            Vector3 nextPosition = positioner.GetNextPositionInDirection(direction);
+            Vector3 nextPosition = GetNextPositionInDirection(direction);
 
-            if (boundary.IsPositionInBounds(nextPosition) && !IsNextMoveCollideWithSnakeBody(direction))
+            if (boundary.IsPositionInBounds(nextPosition) && !IsSnakePosition(nextPosition))
             {
                 previousDirection = direction;
                 return nextPosition;
@@ -61,14 +61,15 @@ namespace Gustorvo.Snake
                 possibleDirections.Remove(direction);
                 int randomPositionIndex = UnityEngine.Random.Range(0, possibleDirections.Count);
                 direction = possibleDirections[randomPositionIndex];
-            } while (!IsNextMoveWithinBounds(direction) && !IsNextMoveCollideWithSnakeBody(direction) &&
+                nextPosition = GetNextPositionInDirection(direction);
+            } while (!IsNextMoveWithinBounds(direction) && !IsSnakePosition(nextPosition) &&
                      possibleDirections.Count > 0);
 
             if (possibleDirections.Count == 0)
                 Debug.LogError("No possible directions");
             SnakeMoveDirection.Direction = direction;
             previousDirection = direction;
-            return GetNextPositionInDirection(direction);
+            return nextPosition;
 
             bool IsNextMoveWithinBounds(Vector3 dir)
             {
@@ -76,10 +77,9 @@ namespace Gustorvo.Snake
                 return boundary.IsPositionInBounds(nextPos);
             }
 
-            bool IsNextMoveCollideWithSnakeBody(Vector3 dir)
+            bool IsSnakePosition(Vector3 pos)
             {
-                Vector3 pos = positioner.GetNextPositionInDirection(dir);
-                return Core.Snake.Positions.Contains(pos);
+                return !Core.Snake.Positions.Any(p => p.AlmostEquals(pos)); 
             }
         }
 

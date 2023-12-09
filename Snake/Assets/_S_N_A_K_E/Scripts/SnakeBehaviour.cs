@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gustorvo.Snake.Input;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -46,6 +47,11 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
+            AlignToGrid();
+        }
+
+        private void Start()
+        {
         }
 
 
@@ -141,5 +147,15 @@ namespace Gustorvo.Snake
         private static SnakeBehaviour instance { get; set; }
 
         public SnakeBody head;
+
+        [Button]
+        private void AlignToGrid()
+        {
+            for (int i = 0; i < snakeParts.Count; i++)
+            {
+                Vector3 neatestPositionInGrid = Core.PlayBoundary.GetNearestPositionInGrid(snakeParts[i].Position);
+                snakeParts[i].MoveTo(neatestPositionInGrid);
+            }
+        }
     }
 }

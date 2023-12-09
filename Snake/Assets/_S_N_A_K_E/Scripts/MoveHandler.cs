@@ -8,7 +8,7 @@ namespace Gustorvo.Snake
 {
     public class MoveHandler : MonoBehaviour
     {
-        [SerializeField] int movesPerSecond = 1;
+        [SerializeField, Range(1, 120)] int movesPerSecond = 1;
         [SerializeField] private SnakeBehaviour snakeBehaviourBehaviour;
         [SerializeField] private SnakeTarget snakeTargetBehaviour;
         [SerializeField] Coroutine snakeMoveCoroutine;

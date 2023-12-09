@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -15,6 +16,11 @@ namespace Gustorvo.Snake
     {
         public Vector3 Position => transform.position;
         public Transform Transform => transform;
+
+        private void Start()
+        {
+            Reposition();
+        }
 
         [Button]
         public void Reposition()
