@@ -26,7 +26,6 @@ namespace Gustorvo.Snake
 
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
-        [SerializeField] private Color headColor;
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
@@ -37,7 +36,7 @@ namespace Gustorvo.Snake
         public ITarget Food { get; set; }
 
 
-        readonly INavigator navigator = new Navigator();
+       // readonly INavigator navigator = new Navigator();
         private Vector3 currentPosition;
 
         public bool HasReachedFood => Food != null && Food.Transform != null &&
