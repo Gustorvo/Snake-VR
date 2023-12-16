@@ -559,7 +559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6fed0b197d552447a1fac5164005f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headColor: {r: 0, g: 0, b: 0, a: 0}
   snakeBodyPrefab: {fileID: 4976642334584835593, guid: e054160eb70d1c746a17913519001994, type: 3}
   headPointer: {fileID: 455938605}
   tailPointer: {fileID: 478072243}
@@ -660,6 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6655d7c25336f46971d50368103769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomSeed: 0
   cellSize: 0.1
   <playBoundary>k__BackingField: {fileID: 2783379}
   <snake>k__BackingField: {fileID: 614664003}
@@ -841,15 +841,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.049999993
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.434
+      value: 0.25000003
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.277
+      value: -0.049999993
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalRotation.w
@@ -877,6 +877,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6222526811239718160, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
+      propertyPath: repositionOnStart
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7342738101647001692, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}

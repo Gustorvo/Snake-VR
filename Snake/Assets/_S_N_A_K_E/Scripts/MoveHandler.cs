@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 using NaughtyAttributes;
+using UnityEditor;
 
 namespace Gustorvo.Snake
 {
@@ -43,6 +44,12 @@ namespace Gustorvo.Snake
         }
 
         [Button]
+        private void UndoMove()
+        {
+            
+        }
+
+        [Button]
         public bool TryMove()
         {
             // InitAllEditor();
@@ -56,8 +63,17 @@ namespace Gustorvo.Snake
                 Snake.Move();
             }
 
+
+#if UNITY_EDITOR
+            if (EditorApplication.isPaused && !Snake.CanMove)
+            {
+                Debug.LogError("Snake can't move");
+            }
+#endif
+
             return Snake.CanMove;
         }
+
 
         [Button]
         public void MoveOpposite()

@@ -4,6 +4,7 @@ namespace Gustorvo.Snake
 {
     public class Core : MonoBehaviour
     {
+        [SerializeField] int randomSeed = 0;
         [SerializeField, Range(0.05f, 0.2f)] private float cellSize = 0.1f;
         [field: SerializeField] public PlayBoundary playBoundary { get; private set; }
         [field: SerializeField] public SnakeBehaviour snake { get; private set; }
@@ -33,6 +34,7 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Instance = this;
+            Random.InitState(randomSeed);
         }
     }
 }

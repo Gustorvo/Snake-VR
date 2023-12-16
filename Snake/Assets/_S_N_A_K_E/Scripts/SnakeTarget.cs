@@ -14,12 +14,14 @@ namespace Gustorvo.Snake
 
     public class SnakeTarget : MonoBehaviour, ITarget
     {
+        [SerializeField] bool repositionOnStart = true;
         public Vector3 Position => transform.position;
         public Transform Transform => transform;
 
         private void Start()
         {
-            Reposition();
+            if (repositionOnStart)
+                Reposition();
         }
 
         [Button]
