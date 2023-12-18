@@ -166,12 +166,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2783378}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1920172638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2783384
 MeshFilter:
@@ -398,7 +398,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.075999975
+      value: -0.049999993
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalRotation.w
@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.024000019
+      value: 0.05000001
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalRotation.w
@@ -576,15 +576,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 614664002}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.374}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 455938600}
   - {fileID: 89691385}
   - {fileID: 478072235}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1920172638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1227868753
 GameObject:
@@ -692,6 +692,45 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1828709456 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
+  m_PrefabInstance: {fileID: 2566678049913415365}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1920172637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1920172638}
+  m_Layer: 0
+  m_Name: Play Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1920172638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920172637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2783381}
+  - {fileID: 1828709456}
+  - {fileID: 614664004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080107175
@@ -837,7 +876,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1920172638}
     m_Modifications:
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.x
@@ -918,7 +957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.12400001
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 6929837484988548455, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_LocalRotation.w
@@ -964,7 +1003,5 @@ SceneRoots:
   - {fileID: 2080107178}
   - {fileID: 85171374}
   - {fileID: 1227868755}
-  - {fileID: 614664004}
-  - {fileID: 2566678049913415365}
-  - {fileID: 2783381}
   - {fileID: 1254170767}
+  - {fileID: 1920172638}

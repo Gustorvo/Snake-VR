@@ -9,7 +9,7 @@ namespace Gustorvo.Snake
     public interface IPositioner
     {
         public Vector3 GetPosition();
-        public List<Vector3> GetPositions();
+        public List<Vector3> GetMovePositions();
         public Vector3 GetPositionInDirection(Vector3 direction);
     }
 
@@ -21,7 +21,7 @@ namespace Gustorvo.Snake
             return GetPositionInDirection(direction);
         }
 
-        public List<Vector3> GetPositions()
+        public List<Vector3> GetMovePositions()
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,41 @@ namespace Gustorvo.Snake
             return direction * MoveStep + headPosition;
         }
 
+        public void Init()
+        {
+            throw new NotImplementedException();
+        }
+
         public float MoveStep => Core.CellSize;
+    }
+
+    public struct MoveDirections
+    {
+        private readonly bool local;
+        private readonly Transform transform;
+        public Vector3 Forward => local ? transform.InverseTransformDirection(Vector3.forward) : Vector3.forward;
+
+       // public Vector3 Back => local ? transform.InverseTransformDirection(Vector3.back) : Vector3.back;
+
+        public Vector3 Left => local ? transform.InverseTransformDirection(Vector3.left) : Vector3.left;
+
+        public Vector3 Right => local ? transform.InverseTransformDirection(Vector3.right) : Vector3.right;
+
+        public Vector3 Up => local ? transform.InverseTransformDirection(Vector3.up) : Vector3.up;
+
+        public Vector3 Down => local ? transform.InverseTransformDirection(Vector3.down) : Vector3.down;
+
+        public Vector3[] ToArray()
+        {
+            return new[] { Forward, Left, Right, Up, Down };
+        }
+
+
+        public MoveDirections(bool local, Transform transform)
+        {
+            this.local = local;
+            this.transform = transform;
+        }
     }
 
     public class AIPositioner : IPositioner
@@ -41,63 +75,36 @@ namespace Gustorvo.Snake
         PlayBoundary boundary => Core.PlayBoundary;
         SnakeBehaviour snake => Core.Snake;
 
-        private Vector3[] moveDirections =
-            { Vector3.forward, Vector3.back, Vector3.left, Vector3.right, Vector3.up, Vector3.down };
-
+        private MoveDirections moveDirections;
         private Vector3 previousDirection;
 
-        public Vector3 GetPosition()
-        {
-            // Vector3 direction = SnakeMoveDirection.Direction;
-            Vector3 direction = GetStraightDirectionToTarget(snake.Target.Position);
-            Vector3 nextPosition = GetPositionInDirection(direction);
 
-            if (boundary.IsPositionInBounds(nextPosition) && !IsSnakePosition(nextPosition))
-            {
-                previousDirection = direction;
-                return nextPosition;
-            }
-
-            List<Vector3> possibleDirections = new List<Vector3>(moveDirections);
-
-            possibleDirections.Remove(-direction);
-            do
-            {
-                possibleDirections.Remove(direction);
-                int randomPositionIndex = UnityEngine.Random.Range(0, possibleDirections.Count);
-                direction = possibleDirections[randomPositionIndex];
-                nextPosition = GetPositionInDirection(direction);
-            } while (!IsNextMoveWithinBounds(direction) && !IsSnakePosition(nextPosition) &&
-                     possibleDirections.Count > 0);
-
-            if (possibleDirections.Count == 0)
-                Debug.LogError("No possible directions");
-            SnakeMoveDirection.Direction = direction;
-            previousDirection = direction;
-            return nextPosition;
-
-            bool IsNextMoveWithinBounds(Vector3 dir)
-            {
-                Vector3 nextPos = GetPositionInDirection(dir);
-                return boundary.IsPositionInBounds(nextPos);
-            }
-        }
-
-       private bool IsSnakePosition(Vector3 pos)
+        private bool IsSnakePosition(Vector3 pos)
         {
             bool isSnakePosition = snake.Positions.Any(p => p.AlmostEquals(pos, 0.0001f));
             return isSnakePosition;
         }
 
-        public List<Vector3> GetPositions()
+        public Vector3 GetPosition()
         {
+            throw new NotImplementedException();
+        }
+
+        public List<Vector3> GetMovePositions()
+        {
+            Transform headTransform = snake.head.transform;
             // Get possible directions
-            List<Vector3> possibleDirections = new List<Vector3>(moveDirections);
-            possibleDirections.Remove(-Core.Snake.Direction);
-            
+            moveDirections = new MoveDirections(true, headTransform);
+
+            List<Vector3> possibleDirections = new List<Vector3>(moveDirections.ToArray());
+          
+
             // find shortest direction
             var shortestDirection = GetStraightDirectionToTarget(snake.Target.Position);
-           
+
+            // transform shortest direction from world to local
+            shortestDirection = headTransform.TransformDirection(shortestDirection);
+
             // make shortest direction first
             possibleDirections.Remove(shortestDirection);
             possibleDirections.Insert(0, shortestDirection);
@@ -118,6 +125,7 @@ namespace Gustorvo.Snake
             return positions;
         }
 
+
         private Vector3 GetStraightDirectionToTarget(Vector3 target)
         {
             Vector3 dirVector = (target - SnakeBehaviour.Head.Position).normalized;
@@ -135,13 +143,5 @@ namespace Gustorvo.Snake
 
         public Vector3 GetPositionInDirection(Vector3 direction) =>
             positioner.GetPositionInDirection(direction);
-
-    }
-
-
-    public struct PositionData
-    {
-        Vector3 direction;
-        Vector3 nextPosition;
     }
 }

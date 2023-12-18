@@ -27,6 +27,7 @@ namespace Gustorvo.Snake
 
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
+        [SerializeField] private bool drawGizmos = false;
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
@@ -40,12 +41,12 @@ namespace Gustorvo.Snake
         // readonly INavigator navigator = new Navigator();
         private Vector3 currentPosition;
 
-        private float distanceToTarget => Vector3.Distance(Head.Position , Target.Position);
+        private float distanceToTarget => Vector3.Distance(Head.Position, Target.Position);
         private bool targetValid => Target != null && Target.Transform != null;
 
         public bool HasReachedTarget =>
             targetValid && (distanceToTarget - Core.CellSize) <= Core.DistanceTolerance;
-           
+
 
         private List<Vector3> nextPositions = new List<Vector3>();
 
@@ -96,7 +97,7 @@ namespace Gustorvo.Snake
 
         public void Move()
         {
-            nextPositions = Positioner.GetPositions();
+            nextPositions = Positioner.GetMovePositions();
             CanMove = nextPositions.Count > 0;
             if (!CanMove) return;
             Tail.TryMoveTo(nextPositions[0], out bool hasCollided);
@@ -145,6 +146,7 @@ namespace Gustorvo.Snake
 
         public Vector3[] Positions => snakeParts.Select(x => x.Position).ToArray();
         public Vector3 Direction => Head.Transform.forward;
+        public Vector3 DirectionLocal => Head.Transform.InverseTransformDirection(Direction);
 
         public SnakeBody Tail
         {
@@ -174,6 +176,7 @@ namespace Gustorvo.Snake
 
         private void OnDrawGizmosSelected()
         {
+            if (!drawGizmos) return;
             // draw possible next positions
             Gizmos.color = Color.green;
             for (int i = 0; i < nextPositions.Count; i++)
