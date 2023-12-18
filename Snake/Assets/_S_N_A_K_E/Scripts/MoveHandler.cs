@@ -34,7 +34,7 @@ namespace Gustorvo.Snake
         void Init()
         {
             Snake = snakeBehaviourBehaviour;
-            Snake.Food = snakeTargetBehaviour;
+            Snake.Target = snakeTargetBehaviour;
         }
 
         void InitAllEditor()
@@ -54,9 +54,9 @@ namespace Gustorvo.Snake
         {
             // InitAllEditor();
 
-            if (Snake.HasReachedFood)
+            if (Snake.HasReachedTarget)
             {
-                Snake.EatFood();
+                Snake.TakeTarget();
             }
             else
             {

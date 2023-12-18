@@ -16,12 +16,12 @@ namespace Gustorvo.Snake
         public static SnakeBody Head { get; }
 
         IPositioner Positioner { get; }
-        bool HasReachedFood { get; }
+        bool HasReachedTarget { get; }
         bool CanMove { get; }
-        ITarget Food { get; set; }
+        ITarget Target { get; set; }
         void Move();
         void MoveInOppositeDirection();
-        void EatFood();
+        void TakeTarget();
         void Init();
     }
 
@@ -34,14 +34,18 @@ namespace Gustorvo.Snake
         public IPositioner Positioner { get; private set; } = new AIPositioner();
 
         public bool CanMove { get; private set; } = true;
-        public ITarget Food { get; set; }
+        public ITarget Target { get; set; }
 
 
         // readonly INavigator navigator = new Navigator();
         private Vector3 currentPosition;
 
-        public bool HasReachedFood => Food != null && Food.Transform != null &&
-                                      Vector3.Distance(Head.Position, Food.Position) < Positioner.MoveStep;
+        private float distanceToTarget => Vector3.Distance(Head.Position , Target.Position);
+        private bool targetValid => Target != null && Target.Transform != null;
+
+        public bool HasReachedTarget =>
+            targetValid && (distanceToTarget - Core.CellSize) <= Core.DistanceTolerance;
+           
 
         private List<Vector3> nextPositions = new List<Vector3>();
 
@@ -75,17 +79,19 @@ namespace Gustorvo.Snake
             Tail = tailPointer;
         }
 
-        public void EatFood()
+        public void TakeTarget()
         {
-            SnakeBody newHead = Instantiate(snakeBodyPrefab, parent: transform, position: Food.Position,
+            Vector3 targetPosition = Target.Position;
+            Target.Reposition();
+            SnakeBody newHead = Instantiate(snakeBodyPrefab, parent: transform, position: targetPosition,
                 rotation: Quaternion.identity);
             snakeParts.Insert(headIndex, newHead);
             Head.ApplyBodyMaterial();
-            Vector3 headDirection = Head.Position - Food.Position;
+            Vector3 headDirection = Head.Position - targetPosition;
             Head = newHead;
             Head.Transform.forward = headDirection;
             Head.ApplyHeadMaterial();
-            Food.Reposition();
+            Debug.Log("target taken");
         }
 
         public void Move()

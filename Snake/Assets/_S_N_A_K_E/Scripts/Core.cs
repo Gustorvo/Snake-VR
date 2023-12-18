@@ -13,6 +13,8 @@ namespace Gustorvo.Snake
         public static PlayBoundary PlayBoundary => Instance.playBoundary;
         public static SnakeBehaviour Snake => Instance.snake;
         public static float CellSize => Instance.cellSize;
+        
+        public static float DistanceTolerance { get; private set; }
 
         #region Singleton
 
@@ -35,6 +37,16 @@ namespace Gustorvo.Snake
         {
             Instance = this;
             Random.InitState(randomSeed);
+
+            DistanceTolerance = CalculateDiagonalDelta() - 0.01f;
+            Debug.Log("DistanceTolerance: " + DistanceTolerance);
+        }
+
+        private static float CalculateDiagonalDelta()
+        {
+            // calculate the diagonal distance between the head and the target;
+            float diagonalDistance = CellSize * Mathf.Sqrt(2);
+            return diagonalDistance - CellSize;
         }
     }
 }

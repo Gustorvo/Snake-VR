@@ -11,7 +11,6 @@ namespace Gustorvo.Snake
         public Vector3 GetPosition();
         public List<Vector3> GetPositions();
         public Vector3 GetPositionInDirection(Vector3 direction);
-        public float MoveStep { get; }
     }
 
     public class Positioner : IPositioner
@@ -50,7 +49,7 @@ namespace Gustorvo.Snake
         public Vector3 GetPosition()
         {
             // Vector3 direction = SnakeMoveDirection.Direction;
-            Vector3 direction = GetStraightDirectionToTarget(snake.Food.Position);
+            Vector3 direction = GetStraightDirectionToTarget(snake.Target.Position);
             Vector3 nextPosition = GetPositionInDirection(direction);
 
             if (boundary.IsPositionInBounds(nextPosition) && !IsSnakePosition(nextPosition))
@@ -95,8 +94,10 @@ namespace Gustorvo.Snake
             // Get possible directions
             List<Vector3> possibleDirections = new List<Vector3>(moveDirections);
             possibleDirections.Remove(-Core.Snake.Direction);
-            var shortestDirection = GetStraightDirectionToTarget(snake.Food.Position);
             
+            // find shortest direction
+            var shortestDirection = GetStraightDirectionToTarget(snake.Target.Position);
+           
             // make shortest direction first
             possibleDirections.Remove(shortestDirection);
             possibleDirections.Insert(0, shortestDirection);
@@ -135,8 +136,6 @@ namespace Gustorvo.Snake
         public Vector3 GetPositionInDirection(Vector3 direction) =>
             positioner.GetPositionInDirection(direction);
 
-
-        public float MoveStep { get; set; } = 0.1f;
     }
 
 
