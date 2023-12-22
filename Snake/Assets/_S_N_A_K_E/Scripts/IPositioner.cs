@@ -29,7 +29,7 @@ namespace Gustorvo.Snake
         public Vector3 GetPositionInDirection(Vector3 direction)
         {
             Vector3 headPosition = SnakeBehaviour.Head.Position;
-            return direction * MoveStep + headPosition;
+            return headPosition + direction * MoveStep;
         }
 
         public void Init()
