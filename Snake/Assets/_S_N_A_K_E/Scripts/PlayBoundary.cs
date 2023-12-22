@@ -137,10 +137,18 @@ namespace Gustorvo.Snake
 
         private void OnDrawGizmos()
         {
-            // draw bounds
             Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(gameBounds.center, gameBounds.size);
-        }
+            // Store the current matrix to revert back later
+            Matrix4x4 originalMatrix = Gizmos.matrix;
 
+            // Apply the object's rotation and position to the Gizmos.matrix
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+
+            // draw the bounds
+            Gizmos.DrawWireCube(gameBounds.center, gameBounds.size);
+
+            // Revert back to the original matrix
+            Gizmos.matrix = originalMatrix;
+        }
     }
 }
