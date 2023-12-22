@@ -559,6 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6fed0b197d552447a1fac5164005f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawGizmos: 0
   snakeBodyPrefab: {fileID: 4976642334584835593, guid: e054160eb70d1c746a17913519001994, type: 3}
   headPointer: {fileID: 455938605}
   tailPointer: {fileID: 478072243}
@@ -723,8 +724,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920172637}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.29074392, z: -0, w: 0.95680094}
+  m_LocalPosition: {x: 1.38, y: 0, z: -1.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -732,7 +733,7 @@ Transform:
   - {fileID: 1828709456}
   - {fileID: 614664004}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 33.805, z: 0}
 --- !u!1 &2080107175
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,15 +881,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.049999993
+      value: 0.15000005
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.25000003
+      value: -0.049999993
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.049999993
+      value: 0.45000002
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalRotation.w

@@ -53,7 +53,7 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
-            AlignToGrid();
+           // AlignToGrid();
         }
 
         private void Start()

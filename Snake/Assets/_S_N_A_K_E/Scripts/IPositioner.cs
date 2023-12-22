@@ -92,7 +92,7 @@ namespace Gustorvo.Snake
 
         public List<Vector3> GetMovePositions()
         {
-            Transform headTransform = snake.head.transform;
+            Transform headTransform = snake.head.Transform;
             // Get possible directions
             moveDirections = new MoveDirections(true, headTransform);
 
@@ -100,14 +100,15 @@ namespace Gustorvo.Snake
           
 
             // find shortest direction
-            var shortestDirection = GetStraightDirectionToTarget(snake.Target.Position);
+            //var shortestDirection = GetStraightDirectionToTarget(snake.Target.Position);
+            //Vector3 shortestDirection = possibleDirections.
 
             // transform shortest direction from world to local
-            shortestDirection = headTransform.TransformDirection(shortestDirection);
+            //shortestDirection = headTransform.TransformDirection(shortestDirection);
 
             // make shortest direction first
-            possibleDirections.Remove(shortestDirection);
-            possibleDirections.Insert(0, shortestDirection);
+            //possibleDirections.Remove(shortestDirection);
+            //possibleDirections.Insert(0, shortestDirection);
 
             // Get positions for each direction
             List<Vector3> positions = new List<Vector3>(possibleDirections.Count);
@@ -121,7 +122,9 @@ namespace Gustorvo.Snake
 
             // Remove positions that are occupied by the snake
             positions = positions.Where(p => !IsSnakePosition(p)).ToList();
-
+            
+            //sort position by distance to target
+            positions = positions.OrderBy(p => Vector3.Distance(snake.Target.Position, p)).ToList();
             return positions;
         }
 

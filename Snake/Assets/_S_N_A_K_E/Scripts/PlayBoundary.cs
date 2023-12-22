@@ -103,6 +103,8 @@ namespace Gustorvo.Snake
                 i++;
                 int randomIndex = Random.Range(0, CellPositions.Count());
                 tempPosition = CellPositions[randomIndex];
+                // convrert local to world
+                tempPosition = transform.TransformPoint(tempPosition);
             } while (excludePositions.Any(x => x.AlmostEquals(tempPosition, 0.0001f)) && i < 100);
 
             if (i >= 100)
@@ -112,23 +114,25 @@ namespace Gustorvo.Snake
             }
 
             randomPosition = tempPosition;
-            PrintSomeDebug();
+           // PrintSomeDebug();
 
 
             return true;
 
-            void PrintSomeDebug()
-            {
-                // find the number of all items in cell array that are almost equal to excludePositions array
-                int count = CellPositions.Count(cell =>
-                    excludePositions.Any(excludePosition => excludePosition.AlmostEquals(cell, 0.0001f)));
-                Debug.Log($"Number of items in cell array that are almost equal to excludePositions array: {count}");
-            }
+            // void PrintSomeDebug()
+            // {
+            //     // find the number of all items in cell array that are almost equal to excludePositions array
+            //     int count = CellPositions.Count(cell =>
+            //         excludePositions.Any(excludePosition => excludePosition.AlmostEquals(cell, 0.0001f)));
+            //     Debug.Log($"Number of items in cell array that are almost equal to excludePositions array: {count}");
+            // }
         }
 
-        public bool IsPositionInBounds(Vector3 postion)
+        public bool IsPositionInBounds(Vector3 position)
         {
-            return gameBounds.Contains(postion);
+            // transform world to local
+            position = transform.InverseTransformPoint(position);
+            return gameBounds.Contains(position);
         }
         public Vector3 GetNearestPositionInGrid(Vector3 position)
         {
