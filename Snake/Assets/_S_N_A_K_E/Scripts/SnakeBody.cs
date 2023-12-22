@@ -10,7 +10,7 @@ namespace Gustorvo.Snake
         [SerializeField] Material headMaterial;
         [SerializeField] Material bodyMaterial;
         [SerializeField] Material tailMaterial;
-        public Vector3 Position => transform.localPosition;
+        public Vector3 Position => transform.position;
         public Transform Transform => transform;
         private Renderer renderer;
 
@@ -27,7 +27,7 @@ namespace Gustorvo.Snake
        
         public void MoveTo(Vector3 moveTo)
         {
-            transform.localPosition = moveTo;
+            transform.position = moveTo;
         }
 
         public void TryMoveTo(Vector3 moveToPosition, out bool bodyCollidesWithItself)

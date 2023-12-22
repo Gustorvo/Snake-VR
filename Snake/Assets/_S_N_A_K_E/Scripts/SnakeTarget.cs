@@ -15,7 +15,7 @@ namespace Gustorvo.Snake
     public class SnakeTarget : MonoBehaviour, ITarget
     {
         [SerializeField] bool repositionOnStart = true;
-        public Vector3 Position => transform.localPosition;
+        public Vector3 Position => transform.position;
         public Transform Transform => transform;
 
         private void Start()
@@ -30,7 +30,7 @@ namespace Gustorvo.Snake
             var snakePositions = Core.Snake.Positions;
             if (Core.PlayBoundary.TryGetRandomPositionExcluding(snakePositions, out var randomPosition))
             {
-                transform.localPosition = randomPosition;
+                transform.position = randomPosition;
             }
         }
     }
