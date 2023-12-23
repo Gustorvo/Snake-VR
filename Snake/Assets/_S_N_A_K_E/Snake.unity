@@ -431,7 +431,7 @@ PrefabInstance:
     - target: {fileID: 8364526694047127146, guid: e054160eb70d1c746a17913519001994, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 102da8074a0dbf6429ed6f9a15d296e7, type: 2}
+      objectReference: {fileID: 2100000, guid: dcf29581736a0a94e81f7f60d5ec7ee8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -559,7 +559,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6fed0b197d552447a1fac5164005f42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawGizmos: 0
+  drawGizmos: 1
+  gizmosLocal: 1
   snakeBodyPrefab: {fileID: 4976642334584835593, guid: e054160eb70d1c746a17913519001994, type: 3}
   headPointer: {fileID: 455938605}
   tailPointer: {fileID: 478072243}
@@ -724,7 +725,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920172637}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.29074392, z: -0, w: 0.95680094}
+  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 1.38, y: 0, z: -1.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -733,7 +734,7 @@ Transform:
   - {fileID: 1828709456}
   - {fileID: 614664004}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 33.805, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!1 &2080107175
 GameObject:
   m_ObjectHideFlags: 0

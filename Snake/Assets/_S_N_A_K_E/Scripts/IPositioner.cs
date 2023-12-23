@@ -8,13 +8,19 @@ namespace Gustorvo.Snake
 {
     public interface IPositioner
     {
+        public Vector3[] GetDirections(Transform transform, bool local);
         public Vector3 GetPosition();
         public List<Vector3> GetMovePositions();
-        public Vector3 GetPositionInDirection(Vector3 direction);
+        public Vector3 GetPositionInDirection(Vector3 direction, bool local);
     }
 
     public class Positioner : IPositioner
     {
+        public Vector3[] GetDirections(Transform transform, bool local)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector3 GetPosition()
         {
             Vector3 direction = SnakeMoveDirection.Direction;
@@ -26,8 +32,10 @@ namespace Gustorvo.Snake
             throw new NotImplementedException();
         }
 
-        public Vector3 GetPositionInDirection(Vector3 direction)
+        public Vector3 GetPositionInDirection(Vector3 direction, bool local = false)
         {
+            if (local)
+                direction = SnakeBehaviour.Head.transform.TransformDirection(direction);
             Vector3 headPosition = SnakeBehaviour.Head.Position;
             return headPosition + direction * MoveStep;
         }
@@ -44,21 +52,24 @@ namespace Gustorvo.Snake
     {
         private readonly bool local;
         private readonly Transform transform;
-        public Vector3 Forward => local ? transform.InverseTransformDirection(Vector3.forward) : Vector3.forward;
+        Quaternion rotation => Core.PlayBoundary.transform.rotation;
 
-       // public Vector3 Back => local ? transform.InverseTransformDirection(Vector3.back) : Vector3.back;
+        public Vector3 forward =>
+            rotation * (local ? transform.InverseTransformDirection(transform.forward) : transform.forward);
 
-        public Vector3 Left => local ? transform.InverseTransformDirection(Vector3.left) : Vector3.left;
+        public Vector3 left =>
+            rotation * (local ? transform.InverseTransformDirection(-transform.right) : -transform.right);
 
-        public Vector3 Right => local ? transform.InverseTransformDirection(Vector3.right) : Vector3.right;
+        public Vector3 right =>
+            rotation * (local ? transform.InverseTransformDirection(transform.right) : transform.right);
 
-        public Vector3 Up => local ? transform.InverseTransformDirection(Vector3.up) : Vector3.up;
+        public Vector3 up => rotation * (local ? transform.InverseTransformDirection(transform.up) : transform.up);
 
-        public Vector3 Down => local ? transform.InverseTransformDirection(Vector3.down) : Vector3.down;
+        public Vector3 down => rotation * (local ? transform.InverseTransformDirection(-transform.up) : -transform.up);
 
         public Vector3[] ToArray()
         {
-            return new[] { Forward, Left, Right, Up, Down };
+            return new[] { Vector3.forward, Vector3.back, Vector3.right, Vector3.left, Vector3.up, Vector3.down };
         }
 
 
@@ -90,6 +101,10 @@ namespace Gustorvo.Snake
             throw new NotImplementedException();
         }
 
+        public Vector3[] GetDirections(Transform transform, bool local) =>
+            new MoveDirections(local, transform).ToArray();
+
+
         public List<Vector3> GetMovePositions()
         {
             Transform headTransform = snake.head.Transform;
@@ -97,18 +112,10 @@ namespace Gustorvo.Snake
             moveDirections = new MoveDirections(true, headTransform);
 
             List<Vector3> possibleDirections = new List<Vector3>(moveDirections.ToArray());
-          
 
-            // find shortest direction
-            //var shortestDirection = GetStraightDirectionToTarget(snake.Target.Position);
-            //Vector3 shortestDirection = possibleDirections.
-
-            // transform shortest direction from world to local
-            //shortestDirection = headTransform.TransformDirection(shortestDirection);
-
-            // make shortest direction first
-            //possibleDirections.Remove(shortestDirection);
-            //possibleDirections.Insert(0, shortestDirection);
+            // Apply world rotation of Play boundary
+            var rotation = Core.PlayBoundary.transform.rotation;
+            possibleDirections = possibleDirections.Select(direction => rotation * direction).ToList();
 
             // Get positions for each direction
             List<Vector3> positions = new List<Vector3>(possibleDirections.Count);
@@ -122,7 +129,7 @@ namespace Gustorvo.Snake
 
             // Remove positions that are occupied by the snake
             positions = positions.Where(p => !IsSnakePosition(p)).ToList();
-            
+
             //sort position by distance to target
             positions = positions.OrderBy(p => Vector3.Distance(snake.Target.Position, p)).ToList();
             return positions;
@@ -144,7 +151,7 @@ namespace Gustorvo.Snake
             return dirVector;
         }
 
-        public Vector3 GetPositionInDirection(Vector3 direction) =>
-            positioner.GetPositionInDirection(direction);
+        public Vector3 GetPositionInDirection(Vector3 direction, bool local = false) =>
+            positioner.GetPositionInDirection(direction, local);
     }
 }

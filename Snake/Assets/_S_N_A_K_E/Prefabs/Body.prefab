@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headMaterial: {fileID: 2100000, guid: 709146c96154c9942bccfd6140bed4da, type: 2}
   bodyMaterial: {fileID: 2100000, guid: dcf29581736a0a94e81f7f60d5ec7ee8, type: 2}
-  tailMaterial: {fileID: 2100000, guid: 102da8074a0dbf6429ed6f9a15d296e7, type: 2}
+  tailMaterial: {fileID: 2100000, guid: dcf29581736a0a94e81f7f60d5ec7ee8, type: 2}
 --- !u!1 &9105438213698618543
 GameObject:
   m_ObjectHideFlags: 0

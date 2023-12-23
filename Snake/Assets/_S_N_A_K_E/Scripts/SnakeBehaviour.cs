@@ -28,6 +28,7 @@ namespace Gustorvo.Snake
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
         [SerializeField] private bool drawGizmos = false;
+        [SerializeField] private bool gizmosLocal = true;
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
@@ -90,7 +91,7 @@ namespace Gustorvo.Snake
             Head.ApplyBodyMaterial();
             Vector3 headDirection = Head.Position - targetPosition;
             Head = newHead;
-            Head.Transform.forward = headDirection;
+           // Head.Transform.forward = headDirection;
             Head.ApplyHeadMaterial();
             Debug.Log("target taken");
         }
@@ -100,16 +101,19 @@ namespace Gustorvo.Snake
             nextPositions = Positioner.GetMovePositions();
             CanMove = nextPositions.Count > 0;
             if (!CanMove) return;
-            Tail.TryMoveTo(nextPositions[0], out bool hasCollided);
+            Vector3 nextPosition = nextPositions[0];
+           
+            Vector3 moveDirection = (nextPosition - head.Position).normalized;
+            Tail.TryMoveTo(nextPosition, out bool hasCollided);
             CanMove = !hasCollided;
             if (CanMove)
             {
                 Head.ApplyBodyMaterial();
             }
 
-            Vector3 headDirection = Tail.Position - Head.Position;
             Head = Tail;
-            Head.Transform.forward = headDirection;
+            Vector3 headUp = Vector3.Cross(moveDirection, Vector3.right).normalized;
+            //Head.Transform.rotation = Quaternion.LookRotation(moveDirection, headUp);
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
             Tail.ApplyTailMaterial();
         }
@@ -191,7 +195,13 @@ namespace Gustorvo.Snake
             if (Head != null)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawLine(Head.Position, Head.Position + Head.Transform.forward);
+                var headPossibleDirections = Positioner.GetDirections(Head.Transform, gizmosLocal);
+                foreach (var dir in headPossibleDirections)
+                {
+                    Gizmos.DrawLine(Head.Position, Head.Position + dir);
+                }
+                // Vector3 headDirectionLocal = transform.InverseTransformDirection(Head.Transform.forward);
+                // Gizmos.DrawLine(Head.Position, Head.Position + headDirectionLocal);
             }
         }
     }

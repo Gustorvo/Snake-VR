@@ -14,8 +14,10 @@ namespace Gustorvo.Snake
         [SerializeField] Transform debugCubeParent;
 
 
-        // private Vector3[] cellArray;
         private ReadOnlyCollection<Vector3> readOnlyCellArray;
+        public Vector3 Forward => transform.forward;
+        public Vector3 Right => transform.right;
+        public Vector3 Up => transform.up;
 
         public ReadOnlyCollection<Vector3> CellPositions
         {
