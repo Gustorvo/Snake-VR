@@ -1,21 +1,22 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 using NaughtyAttributes;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace Gustorvo.Snake
 {
     public class MoveHandler : MonoBehaviour
     {
         [SerializeField, Range(1, 120)] int movesPerSecond = 1;
-        [SerializeField] private SnakeBehaviour snakeBehaviourBehaviour;
+        [SerializeField] private SnakeBehaviour snakeBehaviour;
         [SerializeField] private SnakeTarget snakeTargetBehaviour;
         [SerializeField] Coroutine snakeMoveCoroutine;
 
         private Vector3 snakeCurrentPosition;
-
 
         public ISnake Snake { get; private set; }
 
@@ -27,13 +28,13 @@ namespace Gustorvo.Snake
 
         private void Start()
         {
-            Assert.IsNotNull(snakeBehaviourBehaviour, "SnakeMoverBehaviour is not set");
+            Assert.IsNotNull(snakeBehaviour, "SnakeMoverBehaviour is not set");
             snakeMoveCoroutine = StartCoroutine(MoveSnake());
         }
 
         void Init()
         {
-            Snake = snakeBehaviourBehaviour;
+            Snake = snakeBehaviour;
             Snake.Target = snakeTargetBehaviour;
         }
 
@@ -43,25 +44,11 @@ namespace Gustorvo.Snake
             Snake.Init();
         }
 
-        [Button]
-        private void UndoMove()
-        {
-            
-        }
 
         [Button]
         public bool TryMove()
         {
-            // InitAllEditor();
-
-            if (Snake.HasReachedTarget)
-            {
-                Snake.TakeTarget();
-            }
-            else
-            {
-                Snake.Move();
-            }
+            Snake.Move();
 
 
 #if UNITY_EDITOR
@@ -73,14 +60,7 @@ namespace Gustorvo.Snake
 
             return Snake.CanMove;
         }
-
-
-        [Button]
-        public void MoveOpposite()
-        {
-            InitAllEditor();
-            Snake.MoveInOppositeDirection();
-        }
+      
 
         IEnumerator MoveSnake()
         {

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Gustorvo.Snake
 {
     [Serializable]
-    public class SnakeBody : SnakeBodyComponent
+    public class SnakeBody : SnakeBodyBase
     {
         [SerializeField] Material headMaterial;
         [SerializeField] Material bodyMaterial;

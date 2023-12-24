@@ -20,7 +20,6 @@ namespace Gustorvo.Snake
         bool CanMove { get; }
         ITarget Target { get; set; }
         void Move();
-        void MoveInOppositeDirection();
         void TakeTarget();
         void Init();
     }
@@ -81,30 +80,29 @@ namespace Gustorvo.Snake
             Tail = tailPointer;
         }
 
+      
         public void TakeTarget()
         {
-            Vector3 targetPosition = Target.Position;
-            Target.Reposition();
-            SnakeBody newHead = Instantiate(snakeBodyPrefab, parent: transform, position: targetPosition,
+            SnakeBody newHead = 
+                Instantiate(snakeBodyPrefab, parent: transform, position: Target.Position,
                 rotation: Quaternion.identity);
+            Target.Reposition();
             snakeParts.Insert(headIndex, newHead);
+           
             Head.ApplyBodyMaterial();
-            Vector3 headDirection = Head.Position - targetPosition;
             Head = newHead;
-           // Head.Transform.forward = headDirection;
             Head.ApplyHeadMaterial();
-            Debug.Log("target taken");
         }
 
         public void Move()
         {
-            nextPositions = Positioner.GetMovePositions();
-            CanMove = nextPositions.Count > 0;
-            if (!CanMove) return;
-            Vector3 nextPosition = nextPositions[0];
-           
-            Vector3 moveDirection = (nextPosition - head.Position).normalized;
-            Tail.TryMoveTo(nextPosition, out bool hasCollided);
+            if (HasReachedTarget)
+            {
+                TakeTarget();
+                return;
+            }
+            var newPos = Positioner.GetMovePosition();
+            Tail.TryMoveTo(newPos, out bool hasCollided);
             CanMove = !hasCollided;
             if (CanMove)
             {
@@ -112,20 +110,10 @@ namespace Gustorvo.Snake
             }
 
             Head = Tail;
-            Vector3 headUp = Vector3.Cross(moveDirection, Vector3.right).normalized;
-            //Head.Transform.rotation = Quaternion.LookRotation(moveDirection, headUp);
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
-            Tail.ApplyTailMaterial();
         }
 
-        public void MoveInOppositeDirection()
-        {
-            var nextPosition = Positioner.GetPosition();
-            Head.MoveTo(nextPosition);
-            Tail = head;
-            Head = snakeParts[GetNextIndex(tailIndex)];
-        }
-
+      
         public int GetPreviousIndex(int index)
         {
             return (index - 1 + snakeParts.Count) % snakeParts.Count;

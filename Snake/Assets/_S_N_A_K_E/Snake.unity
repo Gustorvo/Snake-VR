@@ -620,7 +620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movesPerSecond: 2
-  snakeBehaviourBehaviour: {fileID: 614664003}
+  snakeBehaviour: {fileID: 614664003}
   snakeTargetBehaviour: {fileID: 178340505}
 --- !u!4 &1227868755
 Transform:
@@ -882,15 +882,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.15000005
+      value: -0.049999986
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.049999993
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.45000002
+      value: 0.04999999
       objectReference: {fileID: 0}
     - target: {fileID: 3876937623641455048, guid: 92a3304a195908a41b63f2dff0b14a84, type: 3}
       propertyPath: m_LocalRotation.w
