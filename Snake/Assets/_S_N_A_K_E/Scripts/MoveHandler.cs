@@ -71,7 +71,8 @@ namespace Gustorvo.Snake
                 yield return new WaitForSeconds(1f / movesPerSecond);
             }
 
-            Debug.Log("Snake died");
+            Debug.Log($"Snake died. Total snake length: {Snake.Length}");
+            
         }
     }
 }

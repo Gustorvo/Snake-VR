@@ -8,17 +8,19 @@ namespace Gustorvo.Snake
 {
     public interface IPositioner
     {
-        public Vector3 GetMovePosition();
+        public bool TryGetMovePosition(out Vector3 movePosition);
         public IEnumerable<Vector3> GetMovePositions();
         public Vector3 GetPositionInDirection(Vector3 direction);
+        bool IsPositionValid(Vector3 newPos);
     }
 
     public class Positioner : IPositioner
     {
-        public Vector3 GetMovePosition()
+        public bool TryGetMovePosition(out Vector3 movePosition)
         {
             Vector3 direction = SnakeMoveDirection.Direction;
-            return GetPositionInDirection(direction);
+            movePosition = GetPositionInDirection(direction);
+            return IsPositionValid(movePosition);
         }
 
         public IEnumerable<Vector3> GetMovePositions()
@@ -29,6 +31,11 @@ namespace Gustorvo.Snake
         public Vector3 GetPositionInDirection(Vector3 direction)
         {
             return SnakeBehaviour.Head.Position + direction * MoveStep;
+        }
+
+        public bool IsPositionValid(Vector3 newPos)
+        {
+            throw new NotImplementedException();
         }
 
         public void Init()
@@ -63,9 +70,10 @@ namespace Gustorvo.Snake
             throw new NotImplementedException();
         }
 
-        public Vector3 GetMovePosition()
+        public bool TryGetMovePosition(out Vector3 movePosition)
         {
-            return GetMovePositions().FirstOrDefault();
+            movePosition = GetMovePositions().FirstOrDefault();
+            return IsPositionValid(movePosition);
         }
 
 
@@ -86,6 +94,11 @@ namespace Gustorvo.Snake
 
             //sort position by distance to target
             positions = positions.OrderBy(p => Vector3.Distance(snake.Target.Position, p));
+            if (positions.Count() == 0)
+            {
+                Debug.LogError("No possible positions");
+            }
+
             return positions;
         }
 
@@ -107,5 +120,12 @@ namespace Gustorvo.Snake
 
         public Vector3 GetPositionInDirection(Vector3 direction) =>
             positioner.GetPositionInDirection(direction);
+
+        public bool IsPositionValid(Vector3 newPos)
+        {
+            return newPos != default
+                   && boundary.IsPositionInBounds(newPos)
+                   && !IsSnakePosition(newPos);
+        }
     }
 }

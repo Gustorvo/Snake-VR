@@ -16,6 +16,7 @@ namespace Gustorvo.Snake
         bool HasReachedTarget { get; }
         bool CanMove { get; }
         ITarget Target { get; set; }
+        int Length => Positions.Length;
         void Move();
         void TakeTarget();
         void Init();
@@ -47,7 +48,7 @@ namespace Gustorvo.Snake
             Init();
             // AlignToGrid();
         }
-        
+
 
         public void Init()
         {
@@ -90,16 +91,16 @@ namespace Gustorvo.Snake
                 return;
             }
 
-            var newPos = Positioner.GetMovePosition();
-            Tail.TryMoveTo(newPos, out bool hasCollided);
-            CanMove = !hasCollided;
-            if (CanMove)
+            CanMove = false;
+            if (Positioner.TryGetMovePosition(out Vector3 newPos))
             {
+                CanMove = true;
+                Tail.MoveTo(newPos);
+                Tail.ApplyHeadMaterial();
                 Head.ApplyBodyMaterial();
+                Head = Tail;
+                Tail = snakeParts[GetPreviousIndex(tailIndex)];
             }
-
-            Head = Tail;
-            Tail = snakeParts[GetPreviousIndex(tailIndex)];
         }
 
 

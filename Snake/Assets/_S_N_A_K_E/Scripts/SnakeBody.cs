@@ -30,13 +30,6 @@ namespace Gustorvo.Snake
             transform.position = moveTo;
         }
 
-        public void TryMoveTo(Vector3 moveToPosition, out bool bodyCollidesWithItself)
-        {
-            bodyCollidesWithItself = Core.Snake.Positions.Contains(moveToPosition);
-            MoveTo(moveToPosition);
-            ApplyHeadMaterial();
-        }
-
         public void ApplyHeadMaterial()
         {
             renderer.material = headMaterial;

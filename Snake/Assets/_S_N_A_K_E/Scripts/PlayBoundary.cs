@@ -91,10 +91,12 @@ namespace Gustorvo.Snake
             do
             {
                 i++;
+               
                 int randomIndex = Random.Range(0, CellPositions.Count());
                 tempPosition = CellPositions[randomIndex];
                 tempPosition = transform.TransformPoint(tempPosition);
             } while (excludePositions.Any(x => x.AlmostEquals(tempPosition, 0.0001f)) && i < 100);
+
 
             if (i >= 100)
             {
