@@ -102,22 +102,6 @@ namespace Gustorvo.Snake
             return positions;
         }
 
-
-        private Vector3 GetStraightDirectionToTarget(Vector3 target)
-        {
-            Vector3 dirVector = (target - SnakeBehaviour.Head.Position).normalized;
-            int largestIndexAbs = 0;
-            for (int i = 0; i < 3; i++)
-            {
-                largestIndexAbs = Mathf.Abs(dirVector[i]) > Mathf.Abs(dirVector[largestIndexAbs]) ? i : largestIndexAbs;
-            }
-
-            float dirAxis = dirVector[largestIndexAbs] > 0 ? 1 : -1;
-            dirVector = Vector3.zero;
-            dirVector[largestIndexAbs] = dirAxis;
-            return dirVector;
-        }
-
         public Vector3 GetPositionInDirection(Vector3 direction) =>
             positioner.GetPositionInDirection(direction);
 
