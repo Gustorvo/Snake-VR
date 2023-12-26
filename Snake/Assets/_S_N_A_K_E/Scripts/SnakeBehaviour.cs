@@ -8,18 +8,16 @@ namespace Gustorvo.Snake
     public interface ISnake
     {
         public Vector3[] Positions { get; }
-        public Vector3 Direction { get; }
+        public SnakeBody Head { get; }
         public SnakeBody Tail { get; }
-        public static SnakeBody Head { get; }
 
         IPositioner Positioner { get; }
-        bool HasReachedTarget { get; }
         bool CanMove { get; }
         ITarget Target { get; set; }
         int Length => Positions.Length;
         void Move();
-        void TakeTarget();
         void Init();
+        public bool IsSnakePosition(Vector3 newPos);
     }
 
     public class SnakeBehaviour : MonoBehaviour, ISnake
@@ -42,6 +40,8 @@ namespace Gustorvo.Snake
 
 
         private List<Vector3> nextPositions = new List<Vector3>();
+        private static SnakeBehaviour instance { get; set; }
+
 
         private void Awake()
         {
@@ -69,8 +69,10 @@ namespace Gustorvo.Snake
             Tail = tailPointer;
         }
 
+        public bool IsSnakePosition(Vector3 newPos) => Positions.Any(p => p.AlmostEquals(newPos, 0.0001f));
 
-        public void TakeTarget()
+
+        private void TakeTarget()
         {
             SnakeBody newHead =
                 Instantiate(snakeBodyPrefab, parent: transform, position: Target.Position,
@@ -124,27 +126,26 @@ namespace Gustorvo.Snake
             return Tail;
         }
 
-        public SnakeBody tail;
 
         public Vector3[] Positions => snakeParts.Select(x => x.Position).ToArray();
-        public Vector3 Direction => Head.Transform.forward;
-        public Vector3 DirectionLocal => Head.Transform.InverseTransformDirection(Direction);
+        public Vector3 HeadDirection => Head.Transform.forward;
+        public Vector3 DirectionLocal => Head.Transform.InverseTransformDirection(HeadDirection);
 
+        public SnakeBody tail;
         public SnakeBody Tail
         {
             get => tail;
             set { tail = value; }
         }
 
-        public static SnakeBody Head
+        public SnakeBody head;
+        public SnakeBody Head
         {
             get => instance?.head;
             set => instance.head = value;
         }
 
-        private static SnakeBehaviour instance { get; set; }
 
-        public SnakeBody head;
 
         [Button]
         private void AlignToGrid()
@@ -186,5 +187,6 @@ namespace Gustorvo.Snake
                 // Gizmos.DrawLine(Head.Position, Head.Position + headDirectionLocal);
             }
         }
+
     }
 }

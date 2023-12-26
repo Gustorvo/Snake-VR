@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -11,12 +12,15 @@ namespace Gustorvo.Snake
 {
     public class MoveHandler : MonoBehaviour
     {
-        [SerializeField, Range(1, 120)] int movesPerSecond = 1;
+        [SerializeField, Range(0, maxMovesPerSecond)]
+        int movesPerSecond = 1;
+
         [SerializeField] private SnakeBehaviour snakeBehaviour;
         [SerializeField] private SnakeTarget snakeTargetBehaviour;
         [SerializeField] Coroutine snakeMoveCoroutine;
 
         private Vector3 snakeCurrentPosition;
+        private const int maxMovesPerSecond = 90;
 
         public ISnake Snake { get; private set; }
 
@@ -60,7 +64,26 @@ namespace Gustorvo.Snake
 
             return Snake.CanMove;
         }
-      
+
+        bool canMoveUpdate = true;
+        bool gameOverUpdate = false;
+
+        private void Update()
+        {
+            // if (canMoveUpdate)
+            // {
+            //     canMoveUpdate = TryMove();
+            // }
+            // else
+            // {
+            //     if (!gameOverUpdate)
+            //     {
+            //         Debug.Log($"Snake died. Total snake length: {Snake.Length}");
+            //         gameOverUpdate = true;
+            //     }
+            // }
+        }
+
 
         IEnumerator MoveSnake()
         {
@@ -68,11 +91,15 @@ namespace Gustorvo.Snake
             while (canMove)
             {
                 canMove = TryMove();
-                yield return new WaitForSeconds(1f / movesPerSecond);
+                if (maxMovesPerSecond == movesPerSecond)
+                    yield return null;
+                else if (movesPerSecond == 0)
+                    yield return new WaitForSeconds(float.MaxValue);
+                else
+                    yield return new WaitForSeconds(1f / movesPerSecond);
             }
 
             Debug.Log($"Snake died. Total snake length: {Snake.Length}");
-            
         }
     }
 }

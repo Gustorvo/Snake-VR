@@ -9,6 +9,7 @@ namespace Gustorvo.Snake
 {
     public class PlayBoundary : MonoBehaviour
     {
+        [SerializeField] bool drawGizmos;
         [SerializeField] private Transform debugCube;
         [SerializeField] Transform debugCubeParent;
 
@@ -37,11 +38,12 @@ namespace Gustorvo.Snake
             BuildGridOfCellsWithinBounds();
         }
 
-        [SerializeField, Range(1, 2)] private float boxSize;
+        [SerializeField, Range(0.2f, 2)] private float boxSize = 1f;
         [ShowNativeProperty] Bounds gameBounds => new Bounds(Vector3.zero, Vector3.one * boxSize);
         [ShowNativeProperty] int itemsInRow => Mathf.CeilToInt(gameBounds.size.x / cellSize);
 
         [ShowNativeProperty] private float cellSize => Core.CellSize;
+        public Bounds bounds => gameBounds;
 
         private ReadOnlyCollection<Vector3> BuildGridOfCellsWithinBounds()
         {
@@ -66,7 +68,7 @@ namespace Gustorvo.Snake
         }
 
         [Button]
-        void InstantiateCubes()
+        void InstantiateCubesInCellPositions()
         {
             for (int i = 0; i < CellPositions.Count; i++)
             {
@@ -131,6 +133,7 @@ namespace Gustorvo.Snake
 
         private void OnDrawGizmos()
         {
+            if (!drawGizmos) return;
             Gizmos.color = Color.green;
             // Store the current matrix to revert back later
             Matrix4x4 originalMatrix = Gizmos.matrix;
