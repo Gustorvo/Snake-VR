@@ -8,19 +8,13 @@ namespace Gustorvo.Snake
 {
     public interface IPositioner
     {
-        public Vector3[] GetDirections(Transform transform, bool local);
         public Vector3 GetMovePosition();
         public IEnumerable<Vector3> GetMovePositions();
-        public Vector3 GetPositionInDirection(Vector3 direction, bool local);
+        public Vector3 GetPositionInDirection(Vector3 direction);
     }
 
     public class Positioner : IPositioner
     {
-        public Vector3[] GetDirections(Transform transform, bool local)
-        {
-            throw new NotImplementedException();
-        }
-
         public Vector3 GetMovePosition()
         {
             Vector3 direction = SnakeMoveDirection.Direction;
@@ -32,12 +26,9 @@ namespace Gustorvo.Snake
             throw new NotImplementedException();
         }
 
-        public Vector3 GetPositionInDirection(Vector3 direction, bool local = false)
+        public Vector3 GetPositionInDirection(Vector3 direction)
         {
-            if (local)
-                direction = SnakeBehaviour.Head.transform.TransformDirection(direction);
-            Vector3 headPosition = SnakeBehaviour.Head.Position;
-            return headPosition + direction * MoveStep;
+            return SnakeBehaviour.Head.Position + direction * MoveStep;
         }
 
         public void Init()
@@ -48,37 +39,6 @@ namespace Gustorvo.Snake
         public float MoveStep => Core.CellSize;
     }
 
-    public struct MoveDirections
-    {
-        private readonly bool local;
-        private readonly Transform transform;
-        Quaternion rotation => Core.PlayBoundary.transform.rotation;
-
-        public Vector3 forward =>
-            rotation * (local ? transform.InverseTransformDirection(transform.forward) : transform.forward);
-
-        public Vector3 left =>
-            rotation * (local ? transform.InverseTransformDirection(-transform.right) : -transform.right);
-
-        public Vector3 right =>
-            rotation * (local ? transform.InverseTransformDirection(transform.right) : transform.right);
-
-        public Vector3 up => rotation * (local ? transform.InverseTransformDirection(transform.up) : transform.up);
-
-        public Vector3 down => rotation * (local ? transform.InverseTransformDirection(-transform.up) : -transform.up);
-
-        public Vector3[] ToArray()
-        {
-            return new[] { Vector3.forward, Vector3.back, Vector3.right, Vector3.left, Vector3.up, Vector3.down };
-        }
-
-
-        public MoveDirections(bool local, Transform transform)
-        {
-            this.local = local;
-            this.transform = transform;
-        }
-    }
 
     public class AIPositioner : IPositioner
     {
@@ -89,7 +49,6 @@ namespace Gustorvo.Snake
         PlayBoundary boundary => Core.PlayBoundary;
         SnakeBehaviour snake => Core.Snake;
 
-        private MoveDirections moveDirections;
         private Vector3 previousDirection;
 
 
@@ -99,13 +58,15 @@ namespace Gustorvo.Snake
             return isSnakePosition;
         }
 
+        public Vector3[] GetDirections(Transform transform, bool local)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vector3 GetMovePosition()
         {
             return GetMovePositions().FirstOrDefault();
         }
-
-        public Vector3[] GetDirections(Transform transform, bool local) =>
-            new MoveDirections(local, transform).ToArray();
 
 
         public IEnumerable<Vector3> GetMovePositions()
@@ -144,7 +105,7 @@ namespace Gustorvo.Snake
             return dirVector;
         }
 
-        public Vector3 GetPositionInDirection(Vector3 direction, bool local = false) =>
-            positioner.GetPositionInDirection(direction, local);
+        public Vector3 GetPositionInDirection(Vector3 direction) =>
+            positioner.GetPositionInDirection(direction);
     }
 }

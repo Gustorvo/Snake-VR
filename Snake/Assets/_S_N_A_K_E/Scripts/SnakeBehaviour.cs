@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gustorvo.Snake.Input;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gustorvo.Snake
 {
@@ -27,19 +24,14 @@ namespace Gustorvo.Snake
     public class SnakeBehaviour : MonoBehaviour, ISnake
     {
         [SerializeField] private bool drawGizmos = false;
-        [SerializeField] private bool gizmosLocal = true;
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
-        public List<SnakeBody> snakeParts = new();
+        private List<SnakeBody> snakeParts = new();
         public IPositioner Positioner { get; private set; } = new AIPositioner();
 
         public bool CanMove { get; private set; } = true;
         public ITarget Target { get; set; }
-
-
-        // readonly INavigator navigator = new Navigator();
-        private Vector3 currentPosition;
 
         private float distanceToTarget => Vector3.Distance(Head.Position, Target.Position);
         private bool targetValid => Target != null && Target.Transform != null;
@@ -53,13 +45,9 @@ namespace Gustorvo.Snake
         private void Awake()
         {
             Init();
-           // AlignToGrid();
+            // AlignToGrid();
         }
-
-        private void Start()
-        {
-        }
-
+        
 
         public void Init()
         {
@@ -80,15 +68,15 @@ namespace Gustorvo.Snake
             Tail = tailPointer;
         }
 
-      
+
         public void TakeTarget()
         {
-            SnakeBody newHead = 
+            SnakeBody newHead =
                 Instantiate(snakeBodyPrefab, parent: transform, position: Target.Position,
-                rotation: Quaternion.identity);
+                    rotation: Quaternion.identity);
             Target.Reposition();
             snakeParts.Insert(headIndex, newHead);
-           
+
             Head.ApplyBodyMaterial();
             Head = newHead;
             Head.ApplyHeadMaterial();
@@ -101,6 +89,7 @@ namespace Gustorvo.Snake
                 TakeTarget();
                 return;
             }
+
             var newPos = Positioner.GetMovePosition();
             Tail.TryMoveTo(newPos, out bool hasCollided);
             CanMove = !hasCollided;
@@ -113,7 +102,7 @@ namespace Gustorvo.Snake
             Tail = snakeParts[GetPreviousIndex(tailIndex)];
         }
 
-      
+
         public int GetPreviousIndex(int index)
         {
             return (index - 1 + snakeParts.Count) % snakeParts.Count;
@@ -182,8 +171,12 @@ namespace Gustorvo.Snake
             // draw head direction
             if (Head != null)
             {
+                var headPossibleDirections = new List<Vector3>
+                {
+                    Vector3.forward, Vector3.back, Vector3.right, Vector3.left, Vector3.up, Vector3.down
+                };
+
                 Gizmos.color = Color.blue;
-                var headPossibleDirections = Positioner.GetDirections(Head.Transform, gizmosLocal);
                 foreach (var dir in headPossibleDirections)
                 {
                     Gizmos.DrawLine(Head.Position, Head.Position + dir);

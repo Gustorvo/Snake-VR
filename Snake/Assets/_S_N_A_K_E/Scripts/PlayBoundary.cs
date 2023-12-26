@@ -10,7 +10,6 @@ namespace Gustorvo.Snake
     public class PlayBoundary : MonoBehaviour
     {
         [SerializeField] private Transform debugCube;
-        [SerializeField] bool showGrid;
         [SerializeField] Transform debugCubeParent;
 
 
@@ -74,21 +73,10 @@ namespace Gustorvo.Snake
                 Instantiate(debugCube, position: CellPositions[i], rotation: Quaternion.identity,
                     parent: debugCubeParent).localScale = Vector3.one * cellSize;
             }
+            debugCubeParent.SetPositionAndRotation(transform.position, transform.rotation);
         }
 
-
-        public Vector3 GetRandomPosition(bool randomX = true, bool randomY = true, bool randomZ = true)
-        {
-            Vector3 randomPosition = new Vector3(
-                randomX ? Random.Range(gameBounds.min.x, gameBounds.max.x) : 0f,
-                randomY ? Random.Range(gameBounds.min.y, gameBounds.max.y) : 0f,
-                randomZ ? Random.Range(gameBounds.min.z, gameBounds.max.z) : 0f
-            );
-            //if (randomPosition.y 
-            return randomPosition;
-        }
-
-        public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
+       public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
         {
             randomPosition = Vector3.zero;
             Vector3 tempPosition = Vector3.zero;
@@ -105,7 +93,6 @@ namespace Gustorvo.Snake
                 i++;
                 int randomIndex = Random.Range(0, CellPositions.Count());
                 tempPosition = CellPositions[randomIndex];
-                // convrert local to world
                 tempPosition = transform.TransformPoint(tempPosition);
             } while (excludePositions.Any(x => x.AlmostEquals(tempPosition, 0.0001f)) && i < 100);
 
@@ -132,7 +119,6 @@ namespace Gustorvo.Snake
 
         public bool IsPositionInBounds(Vector3 position)
         {
-            // transform world to local
             position = transform.InverseTransformPoint(position);
             return gameBounds.Contains(position);
         }
