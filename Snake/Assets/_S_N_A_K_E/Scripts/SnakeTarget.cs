@@ -32,5 +32,12 @@ namespace Gustorvo.Snake
                 transform.position = randomPosition;
             }
         }
+        [Button]
+        private void AlignToGrid()
+        {
+            // get local position in grid
+          //  var posLocal = transform.InverseTransformPoint(Position);
+            transform.localPosition = Core.PlayBoundary.GetNearestPositionInGrid(transform.localPosition);
+        }
     }
 }

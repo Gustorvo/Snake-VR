@@ -155,9 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba47f4ea524853e418a3e36363adff40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawGizmos: 0
+  drawGizmos: 1
   debugCube: {fileID: 5994020974794546590, guid: a9965f19b4b4dea4d88ce3fce2fd6049, type: 3}
-  debugCubeParent: {fileID: 1254170767}
   boxSize: 0.5
 --- !u!4 &2783381
 Transform:

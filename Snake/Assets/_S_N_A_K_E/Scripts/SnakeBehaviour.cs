@@ -26,7 +26,7 @@ namespace Gustorvo.Snake
         [SerializeField] private SnakeBody snakeBodyPrefab;
         [SerializeField] SnakeBody headPointer;
         [SerializeField] SnakeBody tailPointer;
-        private List<SnakeBody> snakeParts = new();
+        public List<SnakeBody> snakeParts = new();
         public IPositioner Positioner { get; private set; } = new AIPositioner();
 
         public bool CanMove { get; private set; } = true;
@@ -150,10 +150,11 @@ namespace Gustorvo.Snake
         [Button]
         private void AlignToGrid()
         {
+            Init();
             for (int i = 0; i < snakeParts.Count; i++)
             {
-                Vector3 neatestPositionInGrid = Core.PlayBoundary.GetNearestPositionInGrid(snakeParts[i].Position);
-                snakeParts[i].MoveTo(neatestPositionInGrid);
+                Vector3 nearestPositionInGrid = Core.PlayBoundary.GetNearestPositionInGrid(snakeParts[i].PositionLocal);
+                snakeParts[i].MoveToLocal(nearestPositionInGrid);
             }
         }
 
