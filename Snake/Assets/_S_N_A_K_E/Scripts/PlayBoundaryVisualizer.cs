@@ -44,14 +44,14 @@ namespace Gustorvo.Snake
             wireframePoints[0] = corners[0];
             wireframePoints[1] = corners[1];
             wireframePoints[2] = corners[i + 1];
-            wireframePoints[3] = corners[i + 2]; // 11
+            wireframePoints[3] = corners[i + 2]; 
             wireframePoints[4] = corners[2];
             wireframePoints[5] = corners[1];
             wireframePoints[6] = corners[i + 1];
             wireframePoints[7] = corners[i + 0];
             wireframePoints[8] = corners[0];
             wireframePoints[9] = corners[3];
-            wireframePoints[10] = corners[i + 3]; // 4
+            wireframePoints[10] = corners[i + 3]; 
             wireframePoints[11] = corners[i + 2];
             wireframePoints[12] = corners[2];
             wireframePoints[13] = corners[3];
