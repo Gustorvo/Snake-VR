@@ -11,7 +11,6 @@ namespace Gustorvo.Snake
     {
         [SerializeField] bool drawGizmos;
         [SerializeField] private Transform debugCube;
-        [SerializeField] Transform debugCubeParent;
 
 
         private ReadOnlyCollection<Vector3> readOnlyCellArray;
@@ -70,12 +69,16 @@ namespace Gustorvo.Snake
         [Button]
         void InstantiateCubesInCellPositions()
         {
+            GameObject debugCubeParent = new GameObject("DebugCubesParent");
             for (int i = 0; i < CellPositions.Count; i++)
             {
                 Instantiate(debugCube, position: CellPositions[i], rotation: Quaternion.identity,
-                    parent: debugCubeParent).localScale = Vector3.one * cellSize;
+                    parent: debugCubeParent.transform).localScale = Vector3.one * cellSize;
             }
-            debugCubeParent.SetPositionAndRotation(transform.position, transform.rotation);
+
+            var pos = Core.PlayBoundary.transform.position;
+            var rot = Core.PlayBoundary.transform.rotation;
+            debugCubeParent.transform.SetPositionAndRotation(pos, rot);
         }
 
        public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
