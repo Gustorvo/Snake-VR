@@ -17,6 +17,9 @@ namespace Gustorvo.Snake
         public Vector3 Forward => transform.forward;
         public Vector3 Right => transform.right;
         public Vector3 Up => transform.up;
+        public Vector3 Position => transform.position;
+        public Quaternion Rotation => transform.rotation;
+
 
         public ReadOnlyCollection<Vector3> CellPositions
         {
@@ -81,7 +84,7 @@ namespace Gustorvo.Snake
             debugCubeParent.transform.SetPositionAndRotation(pos, rot);
         }
 
-       public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
+        public bool TryGetRandomPositionExcluding(Vector3[] excludePositions, out Vector3 randomPosition)
         {
             randomPosition = Vector3.zero;
             Vector3 tempPosition = Vector3.zero;
@@ -96,7 +99,7 @@ namespace Gustorvo.Snake
             do
             {
                 i++;
-               
+
                 int randomIndex = Random.Range(0, CellPositions.Count());
                 tempPosition = CellPositions[randomIndex];
                 tempPosition = transform.TransformPoint(tempPosition);
@@ -110,7 +113,7 @@ namespace Gustorvo.Snake
             }
 
             randomPosition = tempPosition;
-           // PrintSomeDebug();
+            // PrintSomeDebug();
 
 
             return true;
@@ -129,6 +132,7 @@ namespace Gustorvo.Snake
             position = transform.InverseTransformPoint(position);
             return gameBounds.Contains(position);
         }
+
         public Vector3 GetNearestPositionInGrid(Vector3 position)
         {
             return CellPositions.OrderBy(cell => (cell - position).sqrMagnitude).First();
