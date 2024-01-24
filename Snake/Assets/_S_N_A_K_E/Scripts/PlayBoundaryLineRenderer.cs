@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -13,13 +10,19 @@ namespace Gustorvo.Snake
         void VisualizeBounds(Bounds bounds);
     }
 
-    public class PlayBoundaryVisualizer : MonoBehaviour, IBoundsVisualizer
+    public class PlayBoundaryLineRenderer : MonoBehaviour, IBoundsVisualizer
     {
         [SerializeField] LineRenderer lineRendererPrefab;
-        [SerializeField] private PlayBoundary playBoundary;
-
-        public Bounds bounds => playBoundary.bounds;
+        private PlayBoundary playBoundary;
         private GameObject wiredCube;
+
+        public Bounds bounds => playBoundary != null ? playBoundary.bounds : default;
+
+
+        private void Awake()
+        {
+            playBoundary = FindObjectOfType<PlayBoundary>();
+        }
 
         private void Start()
         {
