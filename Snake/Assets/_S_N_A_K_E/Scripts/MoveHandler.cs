@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -63,25 +62,6 @@ namespace Gustorvo.Snake
 #endif
 
             return Snake.CanMove;
-        }
-
-        bool canMoveUpdate = true;
-        bool gameOverUpdate = false;
-
-        private void Update()
-        {
-            // if (canMoveUpdate)
-            // {
-            //     canMoveUpdate = TryMove();
-            // }
-            // else
-            // {
-            //     if (!gameOverUpdate)
-            //     {
-            //         Debug.Log($"Snake died. Total snake length: {Snake.Length}");
-            //         gameOverUpdate = true;
-            //     }
-            // }
         }
 
 
