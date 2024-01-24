@@ -36,9 +36,9 @@ namespace Gustorvo.Snake
 
         public bool IsPositionValid(Vector3 newPos)
         {
-            return newPos != default
-                   && boundary.IsPositionInBounds(newPos)
-                   && !snake.IsSnakePosition(newPos);
+            return
+                boundary.IsPositionInBounds(newPos)
+                && !snake.IsSnakePosition(newPos);
         }
 
         #region Not implemented
