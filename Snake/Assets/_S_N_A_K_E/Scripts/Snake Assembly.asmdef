@@ -3,7 +3,8 @@
     "rootNamespace": "Gustorvo.Snake",
     "references": [
         "NaughtyAttributes.Core",
-        "Unity.XR.CoreUtils"
+        "Unity.XR.CoreUtils",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

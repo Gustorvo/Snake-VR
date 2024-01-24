@@ -138,6 +138,35 @@ namespace Gustorvo.Snake
             return CellPositions.OrderBy(cell => (cell - position).sqrMagnitude).First();
         }
 
+        public Vector3[] GetMiddlePositionsOfEachSide(bool world = true)
+        {
+            Vector3 center = bounds.center;
+            Vector3 extents = bounds.extents;
+
+            Vector3 worldCenter = world ? transform.TransformPoint(center) : center;
+            Vector3[] midPoints = new Vector3[6];
+
+            // Transform each extents offset by the localToWorldMatrix to include rotation
+            Vector3 topOffset = transform.localToWorldMatrix.MultiplyVector(new Vector3(0, extents.y, 0));
+            Vector3 rightOffset = transform.localToWorldMatrix.MultiplyVector(new Vector3(extents.x, 0, 0));
+            Vector3 forwardOffset = transform.localToWorldMatrix.MultiplyVector(new Vector3(0, 0, extents.z));
+
+            // Top
+            midPoints[0] = worldCenter + topOffset;
+            // Bottom
+            midPoints[1] = worldCenter - topOffset;
+            // Left
+            midPoints[2] = worldCenter - rightOffset;
+            // Right
+            midPoints[3] = worldCenter + rightOffset;
+            // Front
+            midPoints[4] = worldCenter + forwardOffset;
+            // Back
+            midPoints[5] = worldCenter - forwardOffset;
+
+            return midPoints;
+        }
+
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
