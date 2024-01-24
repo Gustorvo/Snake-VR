@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
@@ -47,6 +48,11 @@ namespace Gustorvo.Snake
         {
             Init();
             // AlignToGrid();
+        }
+
+        private void Update()
+        {
+            nextPositions = Positioner.GetMovePositions().ToList();
         }
 
 
@@ -132,6 +138,7 @@ namespace Gustorvo.Snake
         public Vector3 DirectionLocal => Head.Transform.InverseTransformDirection(HeadDirection);
 
         public SnakeBody tail;
+
         public SnakeBody Tail
         {
             get => tail;
@@ -139,12 +146,12 @@ namespace Gustorvo.Snake
         }
 
         public SnakeBody head;
+
         public SnakeBody Head
         {
             get => instance?.head;
             set => instance.head = value;
         }
-
 
 
         [Button]
@@ -162,32 +169,50 @@ namespace Gustorvo.Snake
         {
             if (!drawGizmos) return;
             // draw possible next positions
-            Gizmos.color = Color.green;
             for (int i = 0; i < nextPositions.Count; i++)
             {
                 Vector3 pos = nextPositions[i];
+                if (Positioner.IsPositionValid(pos))
+                {
+                    Gizmos.color = Color.green;
+                }
+                else if (IsSnakePosition(pos))
+                {
+                    Gizmos.color = Color.magenta;
+                    Debug.LogError("Snake position: " + pos);
+                }
+                else if (!Core.PlayBoundary.IsPositionInBounds(pos))
+                {
+                    Gizmos.color = Color.red;
+                    Debug.LogError("Position out of bounds: " + pos);
+                }
+                else
+                {
+                    Debug.LogError("Position not valid: " + pos);
+                    Gizmos.color = Color.yellow;
+                }
+
                 // draw a green sphere at the position
                 Gizmos.DrawWireSphere(pos, Core.CellSize * 0.5f);
             }
 
 
-            // draw head direction
-            if (Head != null)
-            {
-                var headPossibleDirections = new List<Vector3>
-                {
-                    Vector3.forward, Vector3.back, Vector3.right, Vector3.left, Vector3.up, Vector3.down
-                };
-
-                Gizmos.color = Color.blue;
-                foreach (var dir in headPossibleDirections)
-                {
-                    Gizmos.DrawLine(Head.Position, Head.Position + dir);
-                }
-                // Vector3 headDirectionLocal = transform.InverseTransformDirection(Head.Transform.forward);
-                // Gizmos.DrawLine(Head.Position, Head.Position + headDirectionLocal);
-            }
+            // // draw head direction
+            // if (Head != null)
+            // {
+            //     var headPossibleDirections = new List<Vector3>
+            //     {
+            //         Vector3.forward, Vector3.back, Vector3.right, Vector3.left, Vector3.up, Vector3.down
+            //     };
+            //
+            //     Gizmos.color = Color.blue;
+            //     foreach (var dir in headPossibleDirections)
+            //     {
+            //         Gizmos.DrawLine(Head.Position, Head.Position + dir);
+            //     }
+            //     // Vector3 headDirectionLocal = transform.InverseTransformDirection(Head.Transform.forward);
+            //     // Gizmos.DrawLine(Head.Position, Head.Position + headDirectionLocal);
+            // }
         }
-
     }
 }
