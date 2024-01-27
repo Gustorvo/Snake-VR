@@ -17,7 +17,7 @@ MonoBehaviour:
   SharedDepthBuffer: 0
   DepthSubmission: 0
   DashSupport: 0
-  LowOverheadMode: 0
+  LowOverheadMode: 1
   OptimizeBufferDiscards: 1
   PhaseSync: 0
   SymmetricProjection: 1
